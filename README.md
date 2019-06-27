@@ -16,8 +16,8 @@ Here is some following commads that you can use:-
 
 # Server Status :
 
-!server status -- to get numbers of currently active members on server
-!server members -- to get  numbers of total members
+- !server status -- to get numbers of currently active members on server.
+- !server members -- to get  numbers of total members
 
 
 # Member Status:
