@@ -2,8 +2,8 @@
 This bot was created for Discord Hack Week. Heimdallr Bot allows you to monitor your server and it's members and also allows you to communicate with developers without sending DM or joining the home server. It will share reports only with server owner and moderators.
 
 # Requires
-[Python 3.6](http://python.org/getit) 32bit
-[Discord.py](https://discordpy.readthedocs.io/en/latest/)
+[Python 3.6](http://python.org/getit) 32bit,
+[Discord.py](https://discordpy.readthedocs.io/en/latest/) 1.2.3
 
 
 # How To Use:
