@@ -89,7 +89,7 @@ async def on_message(message):
             channel = home.get_channel(int('')) #channel
             await channel.send("%s (%s) from %s (%s,ch=%s) said : %s"%(uname,uid,msn.name,msn.id,message.channel.id,mm))
             
-        elif x[0]=='!hhelp':
+        elif x[0]=='!hdhelp':
             await message.channel.send(banner)
         elif x[0]=='!clear':
             if len(x)==2:
