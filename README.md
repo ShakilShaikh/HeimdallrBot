@@ -47,7 +47,7 @@ Here is some following commads that you can use:-
 
 - !credits -- To find us
 - !feedback [single_line message] -- to communicate with developer
-- !hdhelp -- for this page link
+- !hdhelp -- for this [page link](http://cwfbd.blogspot.com/2019/06/heimdallrbot.html)
 - !version -- to see version of the bot
 
 
