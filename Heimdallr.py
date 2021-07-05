@@ -24,14 +24,6 @@ def is_online(member):
     else:
         return 0
 
-def is_AdminorModer(guild,member):
-    if member.id==guild.owner.id:
-        return True
-    elif 'mod' in get_roles(member.roles):
-        return True
-    else:
-        return False
-is_auth = is_AdminorModer
 
 def get_roles(rolesData):
     roles = []
@@ -51,30 +43,35 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    #await message.call()
     msg=message.content
     ch_name=message.channel.name
     msn = message.guild
     sid = msn.id
     x=msg.split()
-    
     uid = message.author.id
     uname = message.author.name
     chid = message.channel.id
-    authorised = is_auth(message.guild,message.author)
-    print(authorised)
-    say("%s || %s || %s || %s \n"%(msn,ch_name,uname,msg)) # if any error occurs, see why
-    if msg[0]=='!' and (ch_name=='heimdallr-bot' or ch_name=='heimdallr-test') and authorised==True:
+    #print(dir(message.author.voice.channel))
+    #w=await message.author.voice.channel.connect()
+    #await message.author.call()
+    #print(dir(w))
+    #print(dir(w._get_voice_packet()))
+    say("%s %s %s %s \n"%(msn,ch_name,uname,msg))
+    
+    if msg[0]=='!' and (ch_name=='heimdallr-bot' or ch_name=='heimdallr-test'):
         if msg=='!servstat': # only for the developer
-            if str(sid)=='': # checking if command was from home server
+            if str(sid)=='445257357908377621':
+                print([guild for guild in client.guilds])
                 await message.channel.send("We are active in %s server(s)"%len(client.guilds))
-        elif x[0]=='!sendAll' and str(sid)=='': # only for the developer, checking if command was from home server
+        elif x[0]=='!sendAll' and str(sid)=='445257357908377621': # only for the developer
             mm = ' '.join(x[1:])
             for s in client.guilds:
                 channel = discord.utils.get(client.get_all_channels(), guild__name=str(s.name), name='heimdallr-bot')
                 if channel:
                     await channel.send("Home : %s"%mm)
             await message.channel.send("Done!")
-        elif x[0]=='!sendMsg' and str(sid)=='': # only for the developer, checking if command was from home server
+        elif x[0]=='!sendMsg' and str(sid)=='445257357908377621':
             if len(x)>=4:
                 gid = int(x[1])
                 oid = int(x[2])
@@ -85,11 +82,11 @@ async def on_message(message):
             #pass
         elif x[0]=='!feedback':
             mm = ' '.join(x[1:])
-            home = client.get_guild(int('')) # home server
-            channel = home.get_channel(int('')) #channel
+            home = client.get_guild(int('445257357908377621'))
+            channel = home.get_channel(int('593385630596071437'))
             await channel.send("%s (%s) from %s (%s,ch=%s) said : %s"%(uname,uid,msn.name,msn.id,message.channel.id,mm))
             
-        elif x[0]=='!hdhelp':
+        elif x[0]=='!hhelp':
             await message.channel.send(banner)
         elif x[0]=='!clear':
             if len(x)==2:
@@ -109,7 +106,7 @@ async def on_message(message):
             if mem[0]=='!':
                 mem=mem[1:]
             if mem.isdigit():
-                m = message.guild.get_member(int(mem))
+                m = await message.guild.fetch_member(int(mem))
                 if m:
                     if x[2]=='count':
                         ccc = 0
@@ -122,6 +119,7 @@ async def on_message(message):
                         else:
                             seer = message.guild.channels
                             for s in seer:
+                                #print(s.type)
                                 if str(s.name)==x[3] and str(s.type)=='text':
                                     async for mess in s.history(limit=None):
                                         if mess.author.id==m.id:
@@ -166,7 +164,8 @@ async def on_message(message):
                 if mem[0]=='!':
                     mem=mem[1:]
                 if mem.isdigit():
-                    m = message.guild.get_member(int(mem))
+                    m = await message.guild.fetch_member(int(mem))
+                    
                     if m:
                         r = ','.join(get_roles(m.roles))
                         n = str(m.name)
@@ -181,7 +180,7 @@ async def on_message(message):
             if mem[0]=='!':
                 mem=mem[1:]
             if mem.isdigit():
-                m = message.guild.get_member(int(mem))
+                m = await message.guild.fetch_member(int(mem))
                 if m:
                     n = str(m.name)
                     tt = "%s"%(m.joined_at)
@@ -193,7 +192,7 @@ async def on_message(message):
                 mem=mem[1:]
             
             if mem.isdigit():
-                m = message.guild.get_member(int(mem))
+                m = await message.guild.fetch_member(int(mem))
                 if m:
                     na = str(m.name)
                     ni = str(m.nick)
@@ -218,12 +217,16 @@ async def on_message(message):
             if mem[0]=='!':
                 mem=mem[1:]
             if mem.isdigit():
-                m = message.guild.get_member(int(mem))
+                m = await message.guild.fetch_member(int(mem))
                 if m:
                     act=list(m.activities)
                 
                     if act==None or act==[]:
-                        vcc = m.voice.channel
+                        try:
+                            vcc = await m.voice.channel
+                        except:
+                            vcc=None
+                        #print(vcc)
                         if str(m.status)=="online" and vcc!=None:
                             await message.channel.send("He is Online and currently on voice channel named \"%s\""%str(vcc))
                         elif str(m.status)=="online" and vcc==None:
@@ -248,7 +251,14 @@ async def on_message(message):
                             elif (gg[0]=='[<Spotify') and sm==0:
                                 sm=1
                                 await message.channel.send("He is listening "+str(aa[1][1:-3]))
-
+        elif x[0]=='!text':
+            pass
+            #if len(x)>=2:
+                #chh=' '.join(x[1:])
+                #for s in message.guild.channels:
+                    #if str(s.name)==chh and str(s.type)=='text':
+                        #l=len([0 async for mess in s.history(limit=None)])
+                        #await message.channel.send("The channel \"%s\" has %s messages"%(chh,l))
         elif x[0]=='!voice':
             if len(x)>=2:
                 chh=' '.join(x[1:])
@@ -258,6 +268,39 @@ async def on_message(message):
                         cc = len(s.members)
                         await message.channel.send("%s has currently %s member connected, %s"%(chh,cc,mm))
                         break
+        elif x[0]=='!mute':
+            mem = "%s"%x[1]
+            mem = mem[2:-1]
+            print(mem)
+            if mem[0]=='!':
+                mem=mem[1:]
+                print(mem)
+            if mem.isdigit():
+                #m = await message.guild.fetch_member(int(mem))
+                m = await message.guild.fetch_member(int(mem))
+                print(m,type(m),int(mem))
+                #print(m,dir(m.voice.channel))
+                #await 
+                #m.voice.channel
+                #Mmute(m)
+                await m.edit(mute=True)
+        elif x[0]=='!unmute':
+            mem = "%s"%x[1]
+            mem = mem[2:-1]
+            print(mem)
+            if mem[0]=='!':
+                mem=mem[1:]
+                print(mem)
+            if mem.isdigit():
+                #m = await message.guild.fetch_member(int(mem))
+                m = await message.guild.fetch_member(int(mem))
+                print(m,type(m),int(mem))
+                #print(m,dir(m.voice.channel))
+                #await 
+                #m.voice.channel
+                #Mmute(m)
+                await m.edit(mute=False)
+        
         elif msg=='':
             pass
         else:
@@ -266,20 +309,20 @@ async def on_message(message):
 
 banner="""http://cwfbd.blogspot.com/2019/06/heimdallrbot.html"""
     
-
+#@client.ctx
 
 
 @client.event
 async def on_guild_join(guild):
-    home = client.get_guild(int('')) # home server
-    channel = home.get_channel(int('')) # channel id
+    home = client.get_guild(int('445257357908377621'))
+    channel = home.get_channel(int('593391450675478528'))
     await channel.send("We joined a server named \"%s\" owned by %s on %s"%(guild.name,guild.owner.name,time.ctime()))
     #guild.create_text_channel(name="heimdallr-bot")
 
 @client.event
 async def on_guild_remove(guild):
-    home = client.get_guild(int('')) # home server
-    channel = home.get_channel(int('')) # home server
+    home = client.get_guild(int('445257357908377621'))
+    channel = home.get_channel(int('593391450675478528'))
     await channel.send("Well, we was brutally removed from server named \"%s\" owned by %s on %s"%(guild.name,guild.owner.name,time.ctime()))
     #guild.create_text_channel(name="heimdallr-bot")
 
