@@ -1,6 +1,15 @@
 # HeimdallrBot
 
-![HeimdallrBot Logo](heimdallr(1).png)
+<div align="center">
+  <img src="heimdallr(1).png" alt="HeimdallrBot Logo">
+</div>
+
+<p align="center">
+  <a href="https://github.com/ShakilShaikh/HeimdallrBot/blob/master/LICENSE.md">
+    <img src="https://img.shields.io/badge/License-CC%20BY--NC-lightgrey.svg" alt="License">
+  </a>
+</p>
+
 
 ## Overview
 
@@ -69,5 +78,5 @@ You can help us improve the bot by providing feedback using the `!feedback` comm
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [Creative Commons Attribution-NonCommercial License](https://github.com/ShakilShaikh/HeimdallrBot/blob/master/LICENSE.md)
 
